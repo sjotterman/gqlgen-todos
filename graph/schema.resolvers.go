@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"math/rand"
+	"strconv"
 
 	"github.com/sjotterman/gqlgen-todos/graph/model"
 	"github.com/sjotterman/gqlgen-todos/sqlc/food"
@@ -31,6 +32,20 @@ func (r *queryResolver) Restaurants(ctx context.Context) ([]food.Restaurant, err
 		return nil, err
 	}
 	return results, nil
+}
+
+// Restaurant is the resolver for the restaurant field.
+func (r *queryResolver) Restaurant(ctx context.Context, id string) (*food.Restaurant, error) {
+	// TODO: get id passed as number?
+	numId, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	result, err := r.Queries.GetRestaurant(ctx, int32(numId))
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
 
 // Mutation returns MutationResolver implementation.
