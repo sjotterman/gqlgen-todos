@@ -3,7 +3,6 @@ package graph
 //go:generate go run github.com/99designs/gqlgen generate
 
 import (
-	"github.com/sjotterman/gqlgen-todos/graph/model"
 	"github.com/sjotterman/gqlgen-todos/sqlc/food"
 )
 
@@ -12,7 +11,6 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	todos       []*model.Todo
-	restaurants []*model.Restaurant
+	restaurants []*food.Restaurant
 	Queries     *food.Queries
 }

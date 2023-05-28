@@ -2,12 +2,6 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
 
 type Restaurant {
   id: ID!
@@ -22,14 +16,9 @@ type User {
 }
 
 type Query {
-  todos: [Todo!]!
   restaurants: [Restaurant!]!
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
-}
 
 input NewRestaurant {
   name: String!
@@ -38,6 +27,5 @@ input NewRestaurant {
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
   createRestaurant(input: NewRestaurant!): Restaurant!
 }
