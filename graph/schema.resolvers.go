@@ -24,7 +24,6 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todo, nil
 }
 
-// TODO: update this to connect to the database
 // CreateRestaurant is the resolver for the createRestaurant field.
 func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*model.Restaurant, error) {
 	newId := int32(rand.Int())
@@ -37,9 +36,10 @@ func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.New
 	return restaurant, nil
 }
 
+// TODO: remove this once we set up the schema
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]model.Todo, error) {
-	var todos []model.Todo
+	var todos []model.Todo = []model.Todo{}
 	return todos, nil
 }
 
