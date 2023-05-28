@@ -81,8 +81,8 @@ type MutationResolver interface {
 	CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*model.Restaurant, error)
 }
 type QueryResolver interface {
-	Todos(ctx context.Context) ([]*model.Todo, error)
-	Restaurants(ctx context.Context) ([]*model.Restaurant, error)
+	Todos(ctx context.Context) ([]model.Todo, error)
+	Restaurants(ctx context.Context) ([]model.Restaurant, error)
 }
 type TodoResolver interface {
 	User(ctx context.Context, obj *model.Todo) (*model.User, error)
@@ -539,9 +539,9 @@ func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Todo)
+	res := resTmp.([]model.Todo)
 	fc.Result = res
-	return ec.marshalNTodo2ᚕᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐTodoᚄ(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐTodoᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_todos(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -593,9 +593,9 @@ func (ec *executionContext) _Query_restaurants(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Restaurant)
+	res := resTmp.([]model.Restaurant)
 	fc.Result = res
-	return ec.marshalNRestaurant2ᚕᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐRestaurantᚄ(ctx, field.Selections, res)
+	return ec.marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐRestaurantᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_restaurants(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -776,9 +776,9 @@ func (ec *executionContext) _Restaurant_id(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int32)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int32(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Restaurant_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3671,6 +3671,21 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNID2int32(ctx context.Context, v interface{}) (int32, error) {
+	res, err := graphql.UnmarshalInt32(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNID2int32(ctx context.Context, sel ast.SelectionSet, v int32) graphql.Marshaler {
+	res := graphql.MarshalInt32(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3700,7 +3715,7 @@ func (ec *executionContext) marshalNRestaurant2githubᚗcomᚋsjottermanᚋgqlge
 	return ec._Restaurant(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRestaurant2ᚕᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐRestaurantᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Restaurant) graphql.Marshaler {
+func (ec *executionContext) marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐRestaurantᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Restaurant) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3724,7 +3739,7 @@ func (ec *executionContext) marshalNRestaurant2ᚕᚖgithubᚗcomᚋsjotterman�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐRestaurant(ctx, sel, v[i])
+			ret[i] = ec.marshalNRestaurant2githubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐRestaurant(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3773,7 +3788,7 @@ func (ec *executionContext) marshalNTodo2githubᚗcomᚋsjottermanᚋgqlgenᚑto
 	return ec._Todo(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐTodoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐTodoᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Todo) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3797,7 +3812,7 @@ func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋsjottermanᚋgqlge
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTodo2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐTodo(ctx, sel, v[i])
+			ret[i] = ec.marshalNTodo2githubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋgraphᚋmodelᚐTodo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)

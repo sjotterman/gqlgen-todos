@@ -2,7 +2,10 @@ package graph
 
 //go:generate go run github.com/99designs/gqlgen generate
 
-import "github.com/sjotterman/gqlgen-todos/graph/model"
+import (
+	"github.com/sjotterman/gqlgen-todos/graph/model"
+	"github.com/sjotterman/gqlgen-todos/sqlc/food"
+)
 
 // This file will not be regenerated automatically.
 //
@@ -11,4 +14,5 @@ import "github.com/sjotterman/gqlgen-todos/graph/model"
 type Resolver struct {
 	todos       []*model.Todo
 	restaurants []*model.Restaurant
+	Queries     *food.Queries
 }

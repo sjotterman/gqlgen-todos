@@ -24,25 +24,42 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todo, nil
 }
 
+// TODO: update this to connect to the database
 // CreateRestaurant is the resolver for the createRestaurant field.
 func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*model.Restaurant, error) {
+	newId := int32(rand.Int())
 	restaurant := &model.Restaurant{
 		Name:        input.Name,
 		Description: input.Description,
-		ID:          fmt.Sprintf("R%d", rand.Int()),
+		ID:          newId,
 	}
 	r.restaurants = append(r.restaurants, restaurant)
 	return restaurant, nil
 }
 
 // Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return r.todos, nil
+func (r *queryResolver) Todos(ctx context.Context) ([]model.Todo, error) {
+	var todos []model.Todo
+	return todos, nil
 }
 
 // Restaurants is the resolver for the restaurants field.
-func (r *queryResolver) Restaurants(ctx context.Context) ([]*model.Restaurant, error) {
-	return r.restaurants, nil
+func (r *queryResolver) Restaurants(ctx context.Context) ([]model.Restaurant, error) {
+	results, err := r.Queries.ListRestaurants(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// TODO: figure out how to do this automatically
+	var restaurants []model.Restaurant = make([]model.Restaurant, len(results))
+	for i, restaurant := range results {
+		restaurants[i] = model.Restaurant{
+			ID:          restaurant.ID,
+			Name:        restaurant.Name,
+			Description: restaurant.Description,
+			PhoneNumber: restaurant.PhoneNumber,
+		}
+	}
+	return restaurants, nil
 }
 
 // User is the resolver for the user field.
