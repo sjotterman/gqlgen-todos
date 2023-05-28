@@ -9,6 +9,13 @@ type Todo {
   user: User!
 }
 
+type Restaurant {
+  id: ID!
+  name: String!
+  description: String!
+  phoneNumber: String
+}
+
 type User {
   id: ID!
   name: String!
@@ -16,6 +23,7 @@ type User {
 
 type Query {
   todos: [Todo!]!
+  restaurants: [Restaurant!]!
 }
 
 input NewTodo {
@@ -23,6 +31,13 @@ input NewTodo {
   userId: String!
 }
 
+input NewRestaurant {
+  name: String!
+  description: String!
+  phoneNumber: String
+}
+
 type Mutation {
   createTodo(input: NewTodo!): Todo!
+  createRestaurant(input: NewRestaurant!): Restaurant!
 }

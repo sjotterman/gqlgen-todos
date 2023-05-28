@@ -2,6 +2,12 @@
 
 package model
 
+type NewRestaurant struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
+}
+
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`

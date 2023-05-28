@@ -24,9 +24,25 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todo, nil
 }
 
+// CreateRestaurant is the resolver for the createRestaurant field.
+func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*model.Restaurant, error) {
+	restaurant := &model.Restaurant{
+		Name:        input.Name,
+		Description: input.Description,
+		ID:          fmt.Sprintf("R%d", rand.Int()),
+	}
+	r.restaurants = append(r.restaurants, restaurant)
+	return restaurant, nil
+}
+
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return r.todos, nil
+}
+
+// Restaurants is the resolver for the restaurants field.
+func (r *queryResolver) Restaurants(ctx context.Context) ([]*model.Restaurant, error) {
+	return r.restaurants, nil
 }
 
 // User is the resolver for the user field.
