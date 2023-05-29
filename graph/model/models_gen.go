@@ -9,6 +9,6 @@ type NewRestaurant struct {
 }
 
 type User struct {
-	ID   string `json:"id"`
+	ID   int32  `json:"id"`
 	Name string `json:"name"`
 }

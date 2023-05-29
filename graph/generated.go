@@ -51,7 +51,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Restaurant  func(childComplexity int, id string) int
+		Restaurant  func(childComplexity int, id int32) int
 		Restaurants func(childComplexity int) int
 	}
 
@@ -73,7 +73,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Restaurants(ctx context.Context) ([]food.Restaurant, error)
-	Restaurant(ctx context.Context, id string) (*food.Restaurant, error)
+	Restaurant(ctx context.Context, id int32) (*food.Restaurant, error)
 }
 
 type executableSchema struct {
@@ -113,7 +113,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Restaurant(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.Restaurant(childComplexity, args["id"].(int32)), true
 
 	case "Query.restaurants":
 		if e.complexity.Query.Restaurants == nil {
@@ -285,10 +285,10 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_restaurant_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int32
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int32(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -468,7 +468,7 @@ func (ec *executionContext) _Query_restaurant(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Restaurant(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().Restaurant(rctx, fc.Args["id"].(int32))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -847,9 +847,9 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int32)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int32(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3285,21 +3285,6 @@ func (ec *executionContext) unmarshalNID2int32(ctx context.Context, v interface{
 
 func (ec *executionContext) marshalNID2int32(ctx context.Context, sel ast.SelectionSet, v int32) graphql.Marshaler {
 	res := graphql.MarshalInt32(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
-}
-
-func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalID(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalID(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")

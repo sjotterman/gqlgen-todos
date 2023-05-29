@@ -6,8 +6,6 @@ package graph
 
 import (
 	"context"
-	"math/rand"
-	"strconv"
 
 	"github.com/sjotterman/gqlgen-todos/graph/model"
 	"github.com/sjotterman/gqlgen-todos/sqlc/food"
@@ -15,14 +13,17 @@ import (
 
 // CreateRestaurant is the resolver for the createRestaurant field.
 func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*food.Restaurant, error) {
-	newId := int32(rand.Int())
-	restaurant := &food.Restaurant{
+	restaurant := food.CreateRestaurantParams{
 		Name:        input.Name,
 		Description: input.Description,
-		ID:          newId,
+		// Need to figure out how to handle nullable fields
+		// PhoneNumber: input.PhoneNumber,
 	}
-	r.restaurants = append(r.restaurants, restaurant)
-	return restaurant, nil
+	result, err := r.Queries.CreateRestaurant(ctx, restaurant)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
 
 // Restaurants is the resolver for the restaurants field.
@@ -35,13 +36,8 @@ func (r *queryResolver) Restaurants(ctx context.Context) ([]food.Restaurant, err
 }
 
 // Restaurant is the resolver for the restaurant field.
-func (r *queryResolver) Restaurant(ctx context.Context, id string) (*food.Restaurant, error) {
-	// TODO: get id passed as number?
-	numId, err := strconv.Atoi(id)
-	if err != nil {
-		return nil, err
-	}
-	result, err := r.Queries.GetRestaurant(ctx, int32(numId))
+func (r *queryResolver) Restaurant(ctx context.Context, id int32) (*food.Restaurant, error) {
+	result, err := r.Queries.GetRestaurant(ctx, id)
 	if err != nil {
 		return nil, err
 	}
