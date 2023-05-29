@@ -3,7 +3,7 @@
 //   sqlc v1.18.0
 // source: query.sql
 
-package food
+package pg
 
 import (
 	"context"

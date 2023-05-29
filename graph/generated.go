@@ -15,7 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/sjotterman/gqlgen-todos/graph/model"
-	"github.com/sjotterman/gqlgen-todos/sqlc/food"
+	"github.com/sjotterman/gqlgen-todos/sqlc/pg"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -70,12 +70,12 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*food.Restaurant, error)
-	UpdateRestaurant(ctx context.Context, id int32, changes model.UpdateRestaurant) (*food.Restaurant, error)
+	CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*pg.Restaurant, error)
+	UpdateRestaurant(ctx context.Context, id int32, changes model.UpdateRestaurant) (*pg.Restaurant, error)
 }
 type QueryResolver interface {
-	Restaurants(ctx context.Context) ([]food.Restaurant, error)
-	Restaurant(ctx context.Context, id int32) (*food.Restaurant, error)
+	Restaurants(ctx context.Context) ([]pg.Restaurant, error)
+	Restaurant(ctx context.Context, id int32) (*pg.Restaurant, error)
 }
 
 type executableSchema struct {
@@ -400,9 +400,9 @@ func (ec *executionContext) _Mutation_createRestaurant(ctx context.Context, fiel
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*food.Restaurant)
+	res := resTmp.(*pg.Restaurant)
 	fc.Result = res
-	return ec.marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurant(ctx, field.Selections, res)
+	return ec.marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurant(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createRestaurant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -465,9 +465,9 @@ func (ec *executionContext) _Mutation_updateRestaurant(ctx context.Context, fiel
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*food.Restaurant)
+	res := resTmp.(*pg.Restaurant)
 	fc.Result = res
-	return ec.marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurant(ctx, field.Selections, res)
+	return ec.marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurant(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateRestaurant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -530,9 +530,9 @@ func (ec *executionContext) _Query_restaurants(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]food.Restaurant)
+	res := resTmp.([]pg.Restaurant)
 	fc.Result = res
-	return ec.marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurantᚄ(ctx, field.Selections, res)
+	return ec.marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurantᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_restaurants(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -584,9 +584,9 @@ func (ec *executionContext) _Query_restaurant(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*food.Restaurant)
+	res := resTmp.(*pg.Restaurant)
 	fc.Result = res
-	return ec.marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurant(ctx, field.Selections, res)
+	return ec.marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurant(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_restaurant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -752,7 +752,7 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Restaurant_id(ctx context.Context, field graphql.CollectedField, obj *food.Restaurant) (ret graphql.Marshaler) {
+func (ec *executionContext) _Restaurant_id(ctx context.Context, field graphql.CollectedField, obj *pg.Restaurant) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Restaurant_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -796,7 +796,7 @@ func (ec *executionContext) fieldContext_Restaurant_id(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Restaurant_name(ctx context.Context, field graphql.CollectedField, obj *food.Restaurant) (ret graphql.Marshaler) {
+func (ec *executionContext) _Restaurant_name(ctx context.Context, field graphql.CollectedField, obj *pg.Restaurant) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Restaurant_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -840,7 +840,7 @@ func (ec *executionContext) fieldContext_Restaurant_name(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Restaurant_description(ctx context.Context, field graphql.CollectedField, obj *food.Restaurant) (ret graphql.Marshaler) {
+func (ec *executionContext) _Restaurant_description(ctx context.Context, field graphql.CollectedField, obj *pg.Restaurant) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Restaurant_description(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -884,7 +884,7 @@ func (ec *executionContext) fieldContext_Restaurant_description(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Restaurant_phoneNumber(ctx context.Context, field graphql.CollectedField, obj *food.Restaurant) (ret graphql.Marshaler) {
+func (ec *executionContext) _Restaurant_phoneNumber(ctx context.Context, field graphql.CollectedField, obj *pg.Restaurant) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Restaurant_phoneNumber(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -3029,7 +3029,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 
 var restaurantImplementors = []string{"Restaurant"}
 
-func (ec *executionContext) _Restaurant(ctx context.Context, sel ast.SelectionSet, obj *food.Restaurant) graphql.Marshaler {
+func (ec *executionContext) _Restaurant(ctx context.Context, sel ast.SelectionSet, obj *pg.Restaurant) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, restaurantImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -3464,11 +3464,11 @@ func (ec *executionContext) unmarshalNNewRestaurant2githubᚗcomᚋsjottermanᚋ
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRestaurant2githubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurant(ctx context.Context, sel ast.SelectionSet, v food.Restaurant) graphql.Marshaler {
+func (ec *executionContext) marshalNRestaurant2githubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurant(ctx context.Context, sel ast.SelectionSet, v pg.Restaurant) graphql.Marshaler {
 	return ec._Restaurant(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurantᚄ(ctx context.Context, sel ast.SelectionSet, v []food.Restaurant) graphql.Marshaler {
+func (ec *executionContext) marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurantᚄ(ctx context.Context, sel ast.SelectionSet, v []pg.Restaurant) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3492,7 +3492,7 @@ func (ec *executionContext) marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgq
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRestaurant2githubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurant(ctx, sel, v[i])
+			ret[i] = ec.marshalNRestaurant2githubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurant(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3512,7 +3512,7 @@ func (ec *executionContext) marshalNRestaurant2ᚕgithubᚗcomᚋsjottermanᚋgq
 	return ret
 }
 
-func (ec *executionContext) marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋfoodᚐRestaurant(ctx context.Context, sel ast.SelectionSet, v *food.Restaurant) graphql.Marshaler {
+func (ec *executionContext) marshalNRestaurant2ᚖgithubᚗcomᚋsjottermanᚋgqlgenᚑtodosᚋsqlcᚋpgᚐRestaurant(ctx context.Context, sel ast.SelectionSet, v *pg.Restaurant) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")

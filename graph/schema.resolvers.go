@@ -9,12 +9,12 @@ import (
 	"fmt"
 
 	"github.com/sjotterman/gqlgen-todos/graph/model"
-	"github.com/sjotterman/gqlgen-todos/sqlc/food"
+	"github.com/sjotterman/gqlgen-todos/sqlc/pg"
 )
 
 // CreateRestaurant is the resolver for the createRestaurant field.
-func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*food.Restaurant, error) {
-	restaurant := food.CreateRestaurantParams{
+func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.NewRestaurant) (*pg.Restaurant, error) {
+	restaurant := pg.CreateRestaurantParams{
 		Name:        input.Name,
 		Description: input.Description,
 		PhoneNumber: input.PhoneNumber,
@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.New
 }
 
 // UpdateRestaurant is the resolver for the updateRestaurant field.
-func (r *mutationResolver) UpdateRestaurant(ctx context.Context, id int32, changes model.UpdateRestaurant) (*food.Restaurant, error) {
+func (r *mutationResolver) UpdateRestaurant(ctx context.Context, id int32, changes model.UpdateRestaurant) (*pg.Restaurant, error) {
 	existingRestaurant, err := r.Queries.GetRestaurant(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("restaurant with id %d does not exist", id)
@@ -45,7 +45,7 @@ func (r *mutationResolver) UpdateRestaurant(ctx context.Context, id int32, chang
 	if phoneNumber == nil {
 		phoneNumber = &existingRestaurant.PhoneNumber
 	}
-	restaurant := food.UpdateRestaurantParams{
+	restaurant := pg.UpdateRestaurantParams{
 		ID:          id,
 		Name:        *name,
 		Description: *description,
@@ -60,7 +60,7 @@ func (r *mutationResolver) UpdateRestaurant(ctx context.Context, id int32, chang
 }
 
 // Restaurants is the resolver for the restaurants field.
-func (r *queryResolver) Restaurants(ctx context.Context) ([]food.Restaurant, error) {
+func (r *queryResolver) Restaurants(ctx context.Context) ([]pg.Restaurant, error) {
 	results, err := r.Queries.ListRestaurants(ctx)
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (r *queryResolver) Restaurants(ctx context.Context) ([]food.Restaurant, err
 }
 
 // Restaurant is the resolver for the restaurant field.
-func (r *queryResolver) Restaurant(ctx context.Context, id int32) (*food.Restaurant, error) {
+func (r *queryResolver) Restaurant(ctx context.Context, id int32) (*pg.Restaurant, error) {
 	result, err := r.Queries.GetRestaurant(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("restaurant with id %d does not exist", id)

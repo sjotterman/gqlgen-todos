@@ -1,16 +1,14 @@
 package graph
 
-//go:generate go run github.com/99designs/gqlgen generate
+import "github.com/sjotterman/gqlgen-todos/sqlc/pg"
 
-import (
-	"github.com/sjotterman/gqlgen-todos/sqlc/food"
-)
+//go:generate go run github.com/99designs/gqlgen generate
 
 // This file will not be regenerated automatically.
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	restaurants []*food.Restaurant
-	Queries     *food.Queries
+	restaurants []*pg.Restaurant
+	Queries     *pg.Queries
 }

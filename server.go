@@ -11,7 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/joho/godotenv"
 	"github.com/sjotterman/gqlgen-todos/graph"
-	"github.com/sjotterman/gqlgen-todos/sqlc/food"
+	"github.com/sjotterman/gqlgen-todos/sqlc/pg"
 
 	_ "github.com/lib/pq"
 )
@@ -54,7 +54,7 @@ func main() {
 	}
 	defer db.Close()
 
-	queries := food.New(db)
+	queries := pg.New(db)
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{Queries: queries}}))
 
