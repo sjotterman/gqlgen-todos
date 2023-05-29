@@ -27,6 +27,13 @@ input NewRestaurant {
   phoneNumber: String!
 }
 
+input UpdateRestaurant {
+  name: String!
+  description: String!
+  phoneNumber: String!
+}
+
 type Mutation {
   createRestaurant(input: NewRestaurant!): Restaurant!
+  updateRestaurant(id: ID!, changes: UpdateRestaurant!): Restaurant!
 }

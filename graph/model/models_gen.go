@@ -8,6 +8,12 @@ type NewRestaurant struct {
 	PhoneNumber string `json:"phoneNumber"`
 }
 
+type UpdateRestaurant struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	PhoneNumber string `json:"phoneNumber"`
+}
+
 type User struct {
 	ID   int32  `json:"id"`
 	Name string `json:"name"`

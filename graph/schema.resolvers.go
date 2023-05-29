@@ -25,6 +25,24 @@ func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.New
 	return &result, nil
 }
 
+// UpdateRestaurant is the resolver for the updateRestaurant field.
+func (r *mutationResolver) UpdateRestaurant(ctx context.Context, id int32, changes model.UpdateRestaurant) (*food.Restaurant, error) {
+	// todo: ensure we can only update some fields
+	// TODO: ensure we prevent editing models that don't exist
+	restaurant := food.UpdateRestaurantParams{
+		ID:          id,
+		Name:        changes.Name,
+		Description: changes.Description,
+		PhoneNumber: changes.PhoneNumber,
+	}
+	result, err := r.Queries.UpdateRestaurant(ctx, restaurant)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 // Restaurants is the resolver for the restaurants field.
 func (r *queryResolver) Restaurants(ctx context.Context) ([]food.Restaurant, error) {
 	results, err := r.Queries.ListRestaurants(ctx)
