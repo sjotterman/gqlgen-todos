@@ -3,9 +3,9 @@
 package model
 
 type NewRestaurant struct {
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	PhoneNumber *string `json:"phoneNumber,omitempty"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	PhoneNumber string `json:"phoneNumber"`
 }
 
 type User struct {

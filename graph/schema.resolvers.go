@@ -16,8 +16,7 @@ func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.New
 	restaurant := food.CreateRestaurantParams{
 		Name:        input.Name,
 		Description: input.Description,
-		// Need to figure out how to handle nullable fields
-		// PhoneNumber: input.PhoneNumber,
+		PhoneNumber: input.PhoneNumber,
 	}
 	result, err := r.Queries.CreateRestaurant(ctx, restaurant)
 	if err != nil {

@@ -4,11 +4,21 @@ following the gqlgen tutorial
 
 
 ## Tasks
+### sql
 
-### graphql
+Generate sqlc files
+
+
+directory: ./sqlc
+```
+sqlc generate
+```
+
+### generate
 
 Generate graphql with graphqlgen
 
+requires: sql
 ```
 go run github.com/99designs/gqlgen generate
 ```
@@ -21,15 +31,6 @@ Run graphql server
 go run server.go
 ```
 
-### sql
-
-Generate sqlc files
-
-
-directory: ./sqlc
-```
-sqlc generate
-```
 
 # Dependencies
 https://docs.tea.xyz/getting-started/install-tea

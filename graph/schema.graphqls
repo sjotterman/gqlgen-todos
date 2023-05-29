@@ -7,7 +7,7 @@ type Restaurant {
   id: ID!
   name: String!
   description: String!
-  phoneNumber: String
+  phoneNumber: String!
 }
 
 type User {
@@ -24,7 +24,7 @@ type Query {
 input NewRestaurant {
   name: String!
   description: String!
-  phoneNumber: String
+  phoneNumber: String!
 }
 
 type Mutation {
