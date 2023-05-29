@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/sjotterman/gqlgen-todos/graph/model"
 	"github.com/sjotterman/gqlgen-todos/sqlc/food"
@@ -29,9 +30,7 @@ func (r *mutationResolver) CreateRestaurant(ctx context.Context, input model.New
 func (r *mutationResolver) UpdateRestaurant(ctx context.Context, id int32, changes model.UpdateRestaurant) (*food.Restaurant, error) {
 	existingRestaurant, err := r.Queries.GetRestaurant(ctx, id)
 	if err != nil {
-		// doesn't exist
-		// TODO: handle error
-		return nil, err
+		return nil, fmt.Errorf("restaurant with id %d does not exist", id)
 	}
 	// TODO: ensure we prevent editing models that don't exist
 	name := changes.Name
@@ -73,7 +72,7 @@ func (r *queryResolver) Restaurants(ctx context.Context) ([]food.Restaurant, err
 func (r *queryResolver) Restaurant(ctx context.Context, id int32) (*food.Restaurant, error) {
 	result, err := r.Queries.GetRestaurant(ctx, id)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("restaurant with id %d does not exist", id)
 	}
 	return &result, nil
 }
