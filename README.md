@@ -9,7 +9,7 @@ following the gqlgen tutorial
 Generate sqlc files
 
 
-directory: ./sqlc
+directory: ./backend/sqlc
 ```
 sqlc generate
 ```
@@ -18,6 +18,7 @@ sqlc generate
 
 Generate graphql with graphqlgen
 
+directory: ./backend
 requires: sql
 ```
 go run github.com/99designs/gqlgen generate
@@ -25,6 +26,7 @@ go run github.com/99designs/gqlgen generate
 
 ### serve
 
+directory: ./backend
 Run graphql server
 
 ```
