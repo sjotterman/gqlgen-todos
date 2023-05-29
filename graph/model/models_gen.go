@@ -9,9 +9,9 @@ type NewRestaurant struct {
 }
 
 type UpdateRestaurant struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	PhoneNumber string `json:"phoneNumber"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
 }
 
 type User struct {

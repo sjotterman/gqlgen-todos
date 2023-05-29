@@ -28,9 +28,9 @@ input NewRestaurant {
 }
 
 input UpdateRestaurant {
-  name: String!
-  description: String!
-  phoneNumber: String!
+  name: String
+  description: String
+  phoneNumber: String
 }
 
 type Mutation {
