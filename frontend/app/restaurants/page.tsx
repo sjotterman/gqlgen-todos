@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 import { gql } from '@apollo/client';
+import { RestaurantsQuery, RestaurantsQueryVariables } from '@/graphql/graphql';
 
 const query = gql`
   query restaurants {
@@ -16,7 +17,10 @@ const query = gql`
 `;
 
 export default function Page() {
-  const { data } = useSuspenseQuery(query);
+  const { data } = useSuspenseQuery<
+    RestaurantsQuery,
+    RestaurantsQueryVariables
+  >(query);
   console.log({ data });
 
   return (

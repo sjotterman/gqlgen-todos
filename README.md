@@ -14,7 +14,7 @@ directory: ./backend/sqlc
 sqlc generate
 ```
 
-### generate
+### generate-graphql
 
 Generate graphql with graphqlgen
 
@@ -22,6 +22,16 @@ directory: ./backend
 requires: sql
 ```
 go run github.com/99designs/gqlgen generate
+```
+
+### generate
+
+Generate types from graphql
+
+directory: ./frontend
+requires: generate-graphql
+```
+npm run codegen
 ```
 
 ### serve

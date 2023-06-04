@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { getClient } from '@/lib/client';
 import { gql } from '@apollo/client';
+import { RestaurantsQuery, RestaurantsQueryVariables } from '@/graphql/graphql';
 
 const query = gql`
   query restaurants {
@@ -15,7 +16,10 @@ const query = gql`
 
 export default async function Home() {
   const client = getClient();
-  const { data } = await client.query({ query });
+  const { data } = await client.query<
+    RestaurantsQuery,
+    RestaurantsQueryVariables
+  >({ query });
   console.log({ data });
   const restaurants = data.restaurants;
   console.log({ restaurants });
