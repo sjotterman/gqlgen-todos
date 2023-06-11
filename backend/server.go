@@ -9,6 +9,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/clerkinc/clerk-sdk-go/clerk"
 	"github.com/joho/godotenv"
 	"github.com/sjotterman/gqlgen-todos/graph"
 	"github.com/sjotterman/gqlgen-todos/sqlc/pg"
@@ -17,6 +18,20 @@ import (
 )
 
 const defaultPort = "8080"
+
+func authHandler(client clerk.Client, next http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		_, ok := ctx.Value(clerk.ActiveSessionClaims).(*clerk.SessionClaims)
+		if !ok {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Unauthorized"))
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	}
+}
 
 func init() {
 	// loads values from .env into the system
@@ -46,7 +61,15 @@ func main() {
 	if !exists {
 		log.Fatal("DB_NAME not set")
 	}
-
+	clerkSecretKey, exists := os.LookupEnv("CLERK_SECRET_KEY")
+	if !exists {
+		log.Fatal("CLERK_SECRET_KEY not set")
+	}
+	client, err := clerk.NewClient(clerkSecretKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	injectActiveSession := clerk.WithSession(client)
 	dbString := fmt.Sprintf("postgres://%s:%s@%s/%s", username, password, host, dbname)
 	db, err := sql.Open("postgres", dbString)
 	if err != nil {
@@ -57,9 +80,10 @@ func main() {
 	queries := pg.New(db)
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{Queries: queries}}))
+	authMiddleware := injectActiveSession(authHandler(client, srv))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	http.Handle("/query", authMiddleware)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
