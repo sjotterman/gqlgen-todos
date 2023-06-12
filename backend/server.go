@@ -19,16 +19,15 @@ import (
 
 const defaultPort = "8080"
 
-func authHandler(client clerk.Client, next http.Handler) http.HandlerFunc {
+func checkCookieHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		_, ok := ctx.Value(clerk.ActiveSessionClaims).(*clerk.SessionClaims)
-		if !ok {
+		fmt.Println("in authHandler")
+		cookie, err := r.Cookie("__session")
+		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Unauthorized"))
 			return
 		}
-
 		next.ServeHTTP(w, r)
 	}
 }
@@ -80,10 +79,11 @@ func main() {
 	queries := pg.New(db)
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{Queries: queries}}))
-	authMiddleware := injectActiveSession(authHandler(client, srv))
+	authMiddleware := checkCookieHandler(srv)
+	serverWithSession := injectActiveSession(authMiddleware)
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", authMiddleware)
+	http.Handle("/query", serverWithSession)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
