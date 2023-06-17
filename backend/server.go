@@ -35,9 +35,15 @@ func checkCookieHandler(next http.Handler) http.HandlerFunc {
 func authHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
+		fmt.Println("in authHandler")
 		reqToken := r.Header.Get("Authorization")
 		splitToken := strings.Split(reqToken, "Bearer ")
-		token := splitToken[1]
+		token := ""
+		if len(splitToken) >= 2 {
+			token = splitToken[1]
+		} else {
+			fmt.Println("no token")
+		}
 		fmt.Println("token:", token)
 		_, ok := ctx.Value(clerk.ActiveSessionClaims).(*clerk.SessionClaims)
 		if !ok {
