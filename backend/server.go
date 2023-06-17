@@ -10,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/clerkinc/clerk-sdk-go/clerk"
+	"github.com/joho/godotenv"
 	"github.com/sjotterman/gqlgen-todos/graph"
 	"github.com/sjotterman/gqlgen-todos/sqlc/pg"
 
@@ -47,12 +48,12 @@ func authHandler(next http.Handler) http.HandlerFunc {
 	}
 }
 
-// func init() {
-// 	// loads values from .env into the system
-// 	if err := godotenv.Load(); err != nil {
-// 		log.Print("No .env file found")
-// 	}
-// }
+func init() {
+	// loads values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
+}
 
 func main() {
 	port := os.Getenv("PORT")
