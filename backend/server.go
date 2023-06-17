@@ -10,7 +10,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/clerkinc/clerk-sdk-go/clerk"
-	"github.com/joho/godotenv"
 	"github.com/sjotterman/gqlgen-todos/graph"
 	"github.com/sjotterman/gqlgen-todos/sqlc/pg"
 
@@ -21,7 +20,7 @@ const defaultPort = "8080"
 
 func checkCookieHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("__session")
+		_, err := r.Cookie("__session")
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Unauthorized"))
