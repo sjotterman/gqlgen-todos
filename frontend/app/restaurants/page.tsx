@@ -17,11 +17,11 @@ const query = gql`
 `;
 
 export default function Page() {
-  const { data } = useSuspenseQuery<
+  const { data, error } = useSuspenseQuery<
     RestaurantsQuery,
     RestaurantsQueryVariables
   >(query);
-  console.log({ data });
+  console.log({ data, error });
 
   return (
     <main>
