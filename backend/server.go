@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -27,11 +26,6 @@ func checkCookieHandler(next http.Handler) http.HandlerFunc {
 		cookie, err := r.Cookie("__session")
 		fmt.Println("cookie", cookie)
 		fmt.Println("cookie err", err)
-		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorized"))
-			return
-		}
 		next.ServeHTTP(w, r)
 	}
 }
@@ -39,9 +33,6 @@ func checkCookieHandler(next http.Handler) http.HandlerFunc {
 func authHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		reqToken := r.Header.Get("Authorization")
-		splitToken := strings.Split(reqToken, "Bearer ")
-		reqToken = splitToken[1]
 		_, ok := ctx.Value(clerk.ActiveSessionClaims).(*clerk.SessionClaims)
 		if !ok {
 			w.WriteHeader(http.StatusUnauthorized)
