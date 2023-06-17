@@ -48,12 +48,12 @@ func authHandler(next http.Handler) http.HandlerFunc {
 	}
 }
 
-func init() {
-	// loads values from .env into the system
-	if err := godotenv.Load(); err != nil {
-		log.Print("No .env file found")
-	}
-}
+// func init() {
+// 	// loads values from .env into the system
+// 	if err := godotenv.Load(); err != nil {
+// 		log.Print("No .env file found")
+// 	}
+// }
 
 func main() {
 	port := os.Getenv("PORT")
