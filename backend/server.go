@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -33,6 +34,10 @@ func checkCookieHandler(next http.Handler) http.HandlerFunc {
 func authHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
+		reqToken := r.Header.Get("Authorization")
+		splitToken := strings.Split(reqToken, "Bearer ")
+		token := splitToken[1]
+		fmt.Println("token", token)
 		_, ok := ctx.Value(clerk.ActiveSessionClaims).(*clerk.SessionClaims)
 		if !ok {
 			w.WriteHeader(http.StatusUnauthorized)
@@ -47,13 +52,11 @@ func authHandler(next http.Handler) http.HandlerFunc {
 func CORS(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
-		fmt.Println("origin", origin)
+		fmt.Println("origin:", origin)
 		for _, allowedOrigin := range allowedOrigins {
 			if allowedOrigin == origin {
 				fmt.Println("allowed origin", allowedOrigin)
 				w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-			} else {
-				fmt.Println("not allowed origin", allowedOrigin)
 			}
 		}
 		w.Header().Add("Access-Control-Allow-Credentials", "true")
