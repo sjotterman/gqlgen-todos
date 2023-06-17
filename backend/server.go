@@ -20,12 +20,18 @@ import (
 
 const defaultPort = "8080"
 
-var allowedOrigins = []string{"http://localhost:3000"}
+var allowedOrigins = []string{"http://localhost:3000", "https://menus.otterman.dev"}
+
 func checkCookieHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("__session")
 		fmt.Println("cookie", cookie)
 		fmt.Println("cookie err", err)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Unauthorized"))
+			return
+		}
 		next.ServeHTTP(w, r)
 	}
 }
@@ -36,7 +42,6 @@ func authHandler(next http.Handler) http.HandlerFunc {
 		reqToken := r.Header.Get("Authorization")
 		splitToken := strings.Split(reqToken, "Bearer ")
 		reqToken = splitToken[1]
-		fmt.Println("reqToken", reqToken)
 		_, ok := ctx.Value(clerk.ActiveSessionClaims).(*clerk.SessionClaims)
 		if !ok {
 			w.WriteHeader(http.StatusUnauthorized)
