@@ -16,10 +16,9 @@ const GRAPHQL_URL =
   process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:8080/query';
 
 function makeClient() {
-  console.log('makeClient');
-  console.log('GRAPHQL_URL', GRAPHQL_URL);
   const httpLink = new HttpLink({
     uri: GRAPHQL_URL,
+    credentials: 'include',
   });
 
   return new ApolloClient({

@@ -20,7 +20,6 @@ export default async function Home() {
     RestaurantsQuery,
     RestaurantsQueryVariables
   >({ query });
-  console.log({ data });
   const restaurants = data.restaurants;
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
