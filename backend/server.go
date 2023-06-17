@@ -24,9 +24,7 @@ var allowedOrigins = []string{"http://localhost:3000", "https://menus.otterman.d
 
 func checkCookieHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("__session")
-		fmt.Println("cookie", cookie)
-		fmt.Println("cookie err", err)
+		fmt.Println("in (no-op) checkCookieHandler")
 		next.ServeHTTP(w, r)
 	}
 }
