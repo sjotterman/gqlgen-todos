@@ -20,6 +20,7 @@ import (
 
 const defaultPort = "8080"
 
+var allowedOrigins = []string{"http://localhost:3000"}
 func checkCookieHandler(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("__session")
@@ -49,7 +50,16 @@ func authHandler(next http.Handler) http.HandlerFunc {
 // https://stackoverflow.com/a/64064331
 func CORS(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Access-Control-Allow-Origin", "*")
+		origin := r.Header.Get("Origin")
+		fmt.Println("origin", origin)
+		for _, allowedOrigin := range allowedOrigins {
+			if allowedOrigin == origin {
+				fmt.Println("allowed origin", allowedOrigin)
+				w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
+			} else {
+				fmt.Println("not allowed origin", allowedOrigin)
+			}
+		}
 		w.Header().Add("Access-Control-Allow-Credentials", "true")
 		w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
