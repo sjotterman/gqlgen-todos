@@ -37,7 +37,7 @@ func authHandler(next http.Handler) http.HandlerFunc {
 		reqToken := r.Header.Get("Authorization")
 		splitToken := strings.Split(reqToken, "Bearer ")
 		token := splitToken[1]
-		fmt.Println("token", token)
+		fmt.Println("token:", token)
 		_, ok := ctx.Value(clerk.ActiveSessionClaims).(*clerk.SessionClaims)
 		if !ok {
 			w.WriteHeader(http.StatusUnauthorized)
