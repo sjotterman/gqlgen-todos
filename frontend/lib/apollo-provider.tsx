@@ -12,9 +12,13 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
 
+const GRAPHQL_URL = process.env.GRAPHQL_URL ?? 'http://localhost:8080/query';
+
 function makeClient() {
+  console.log('makeClient');
+  console.log('GRAPHQL_URL', GRAPHQL_URL);
   const httpLink = new HttpLink({
-    uri: 'http://localhost:8080/query',
+    uri: GRAPHQL_URL,
   });
 
   return new ApolloClient({
