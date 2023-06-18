@@ -22,7 +22,6 @@ const GRAPHQL_URL =
   process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:8080/query';
 
 const getMakeClient = (token: string) => {
-  console.log('getMakeClient', { token });
   const makeClient = () => {
     const httpLink = new HttpLink({
       uri: GRAPHQL_URL,
@@ -58,7 +57,6 @@ export const ApolloWrapper = ({ children }: React.PropsWithChildren) => {
   useEffect(() => {
     const asyncFunc = async () => {
       const newToken = await getToken();
-      console.log({ newToken });
       setToken(newToken);
     };
     asyncFunc().catch((e) => {
