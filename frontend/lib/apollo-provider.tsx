@@ -11,8 +11,11 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
-import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { setContext } from '@apollo/client/link/context';
+
+type UseAuth = ReturnType<typeof useAuth>;
+type GetToken = UseAuth['getToken'];
 
 /*
  * This client is used in the browser
@@ -21,14 +24,33 @@ import { useAuth } from '@clerk/nextjs';
 const GRAPHQL_URL =
   process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:8080/query';
 
-const getMakeClient = (token: string) => {
+let token: string | null | undefined = null;
+
+const getMakeClient = (getToken: GetToken) => {
+  const asyncAuthLink = setContext((_request) => {
+    const asyncGetToken = async () => {
+      if (token != null) {
+        return token;
+      }
+      token = await getToken();
+      return token;
+    };
+    return asyncGetToken().then((token) => {
+      if (token == null || token === '') {
+        return {};
+      }
+      return {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      };
+    });
+  });
+
   const makeClient = () => {
     const httpLink = new HttpLink({
       uri: GRAPHQL_URL,
       credentials: 'include',
-      headers: {
-        ...(token != null ? { authorization: `Bearer ${token}` } : {}),
-      },
     });
 
     return new ApolloClient({
@@ -41,7 +63,7 @@ const getMakeClient = (token: string) => {
               }),
               httpLink,
             ])
-          : ApolloLink.from([httpLink]),
+          : ApolloLink.from([asyncAuthLink, httpLink]),
     });
   };
   return makeClient;
@@ -53,28 +75,9 @@ function makeSuspenseCache() {
 
 export const ApolloWrapper = ({ children }: React.PropsWithChildren) => {
   const { getToken } = useAuth();
-  const [token, setToken] = useState<string | null>();
-  useEffect(() => {
-    const asyncFunc = async () => {
-      const newToken = await getToken();
-      setToken(newToken);
-    };
-    asyncFunc().catch((e) => {
-      console.error('error in async func', e);
-    });
-  });
-  const client = useMemo(() => {
-    if (token == null) {
-      return null;
-    }
-    return getMakeClient(token);
-  }, [token]);
-  if (client == null) {
-    return null;
-  }
   return (
     <ApolloNextAppProvider
-      makeClient={client}
+      makeClient={getMakeClient(getToken)}
       makeSuspenseCache={makeSuspenseCache}
     >
       {children}
