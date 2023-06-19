@@ -34,6 +34,15 @@ requires: generate-graphql
 npm run codegen
 ```
 
+### serve-dev
+
+directory: ./backend
+Run graphql server in development mode, automatically restarting on changes
+Requires air - https://github.com/cosmtrek/air/
+
+```
+air -c .air.toml
+```
 ### serve
 
 directory: ./backend
