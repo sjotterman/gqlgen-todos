@@ -20,6 +20,50 @@ import (
 
 const defaultPort = "8080"
 
+type envVars struct {
+	port           string
+	dbUsername     string
+	dbPassword     string
+	dbHost         string
+	dbName         string
+	clerkSecretKey string
+}
+
+func getEnvVars() (envVars, error) {
+	envVars := envVars{}
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
+	}
+	envVars.port = port
+	username, exists := os.LookupEnv("DB_USERNAME")
+	if !exists {
+		return envVars, fmt.Errorf("DB_USERNAME not set")
+	}
+	envVars.dbUsername = username
+	password, exists := os.LookupEnv("DB_PASSWORD")
+	if !exists {
+		return envVars, fmt.Errorf("DB_PASSWORD not set")
+	}
+	envVars.dbPassword = password
+	host, exists := os.LookupEnv("DB_HOST")
+	if !exists {
+		return envVars, fmt.Errorf("DB_HOST not set")
+	}
+	envVars.dbHost = host
+	dbname, exists := os.LookupEnv("DB_NAME")
+	if !exists {
+		return envVars, fmt.Errorf("DB_NAME not set")
+	}
+	envVars.dbName = dbname
+	clerkSecretKey, exists := os.LookupEnv("CLERK_SECRET_KEY")
+	if !exists {
+		return envVars, fmt.Errorf("CLERK_SECRET_KEY not set")
+	}
+	envVars.clerkSecretKey = clerkSecretKey
+	return envVars, nil
+}
+
 var allowedOrigins = []string{"http://localhost:3000", "https://menus.otterman.dev"}
 
 func checkCookieHandler(next http.Handler) http.HandlerFunc {
@@ -87,36 +131,16 @@ func init() {
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
+	envVars, err := getEnvVars()
+	if err != nil {
+		log.Fatal(err)
 	}
-	username, exists := os.LookupEnv("DB_USERNAME")
-	if !exists {
-		log.Fatal("DB_USERNAME not set")
-	}
-	password, exists := os.LookupEnv("DB_PASSWORD")
-	if !exists {
-		log.Fatal("DB_PASSWORD not set")
-	}
-	host, exists := os.LookupEnv("DB_HOST")
-	if !exists {
-		log.Fatal("DB_HOST not set")
-	}
-	dbname, exists := os.LookupEnv("DB_NAME")
-	if !exists {
-		log.Fatal("DB_NAME not set")
-	}
-	clerkSecretKey, exists := os.LookupEnv("CLERK_SECRET_KEY")
-	if !exists {
-		log.Fatal("CLERK_SECRET_KEY not set")
-	}
-	client, err := clerk.NewClient(clerkSecretKey)
+	client, err := clerk.NewClient(envVars.clerkSecretKey)
 	if err != nil {
 		log.Fatal(err)
 	}
 	injectActiveSession := clerk.WithSession(client)
-	dbString := fmt.Sprintf("postgres://%s:%s@%s/%s", username, password, host, dbname)
+	dbString := fmt.Sprintf("postgres://%s:%s@%s/%s", envVars.dbUsername, envVars.dbPassword, envVars.dbHost, envVars.dbName)
 	db, err := sql.Open("postgres", dbString)
 	if err != nil {
 		log.Fatal(err)
@@ -134,6 +158,6 @@ func main() {
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", withCors)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", envVars.port)
+	log.Fatal(http.ListenAndServe(":"+envVars.port, nil))
 }
