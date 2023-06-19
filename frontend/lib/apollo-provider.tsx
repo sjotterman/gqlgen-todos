@@ -48,7 +48,12 @@ const getMakeClient = (getToken: GetToken) => {
   });
 
   const makeClient = () => {
-    const httpLink = new HttpLink({
+    const httpLinkWithCookie = new HttpLink({
+      uri: GRAPHQL_URL,
+      credentials: 'include',
+    });
+
+    const httpLinkWithoutCookie = new HttpLink({
       uri: GRAPHQL_URL,
       credentials: 'include',
     });
@@ -61,9 +66,9 @@ const getMakeClient = (getToken: GetToken) => {
               new SSRMultipartLink({
                 stripDefer: true,
               }),
-              httpLink,
+              httpLinkWithCookie,
             ])
-          : ApolloLink.from([asyncAuthLink, httpLink]),
+          : ApolloLink.from([asyncAuthLink, httpLinkWithoutCookie]),
     });
   };
   return makeClient;
