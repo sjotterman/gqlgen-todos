@@ -18,8 +18,8 @@ type envVars struct {
 
 func GetEnvVars() (envVars, error) {
 	envVars := envVars{}
-	port := os.Getenv("PORT")
-	if port == "" {
+	port, exists := os.LookupEnv("PORT")
+	if !exists {
 		port = defaultPort
 	}
 	envVars.Port = port
