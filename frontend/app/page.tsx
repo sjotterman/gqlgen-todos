@@ -1,7 +1,6 @@
 import { getClient } from '@/lib/client';
 import { gql } from '@apollo/client';
 import { RestaurantsQuery, RestaurantsQueryVariables } from '@/graphql/graphql';
-import Link from 'next/link';
 
 const query = gql`
   query restaurants {
@@ -26,9 +25,6 @@ export default async function Home() {
       <div>
         <h1>Hello, world</h1>
       </div>
-      <Link href="/restaurants">
-        <p>Restaurants</p>
-      </Link>
       <div>
         {restaurants.map((restaurant) => {
           return <div key={restaurant.id}>{restaurant.name}</div>;

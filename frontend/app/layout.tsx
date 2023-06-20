@@ -33,6 +33,11 @@ export default function RootLayout({
                     Home
                   </Link>
                 </li>
+                <li>
+                  <Link className="contrast" href="/restaurants">
+                    Restaurants
+                  </Link>
+                </li>
               </ul>
               <ul dir="rtl">
                 <li>
