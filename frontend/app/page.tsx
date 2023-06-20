@@ -1,6 +1,5 @@
 import { getClient } from '@/lib/client';
 import { gql } from '@apollo/client';
-import { UserButton } from '@clerk/nextjs';
 import { RestaurantsQuery, RestaurantsQueryVariables } from '@/graphql/graphql';
 import Link from 'next/link';
 
@@ -23,10 +22,9 @@ export default async function Home() {
   >({ query });
   const restaurants = data.restaurants;
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <UserButton afterSignOutUrl="/" />
+    <main className="container">
       <div>
-        <h1 className="text-4xl font-bold">Hello, world</h1>
+        <h1>Hello, world</h1>
       </div>
       <Link href="/restaurants">
         <p>Restaurants</p>
