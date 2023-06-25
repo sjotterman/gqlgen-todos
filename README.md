@@ -2,14 +2,14 @@
 
 following the gqlgen tutorial
 
-
 ## Tasks
+
 ### sql
 
 Generate sqlc files
 
-
 directory: ./backend/sqlc
+
 ```
 sqlc generate
 ```
@@ -20,6 +20,7 @@ Generate graphql with graphqlgen
 
 directory: ./backend
 requires: sql
+
 ```
 go run github.com/99designs/gqlgen generate
 ```
@@ -30,6 +31,7 @@ Generate types from graphql
 
 directory: ./frontend
 requires: generate-graphql
+
 ```
 npm run codegen
 ```
@@ -43,6 +45,7 @@ Requires air - https://github.com/cosmtrek/air/
 ```
 air -c .air.toml
 ```
+
 ### serve
 
 directory: ./backend
@@ -54,9 +57,12 @@ go run server.go
 
 
 # Dependencies
+
 https://docs.tea.xyz/getting-started/install-tea
 
 | Project    | Version |
 | ---------- | ------- |
-| go.dev     | ^1.20   |
-| xcfile.dev | ^0.4.1  |
+| go.dev     | ~1.19   |
+| xcfile.dev | ~0.4.1  |
+| npmjs.com  | ~9      |
+| nodejs.org | ~20     |
