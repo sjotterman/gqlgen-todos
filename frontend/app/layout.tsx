@@ -45,12 +45,6 @@ export default function RootLayout({
                 </li>
               </ul>
             </nav>
-            <header className="container">
-              <hgroup>
-                <h1>Title</h1>
-                <h2>Subtitle</h2>
-              </hgroup>
-            </header>
           </div>
           <ApolloWrapper>{children}</ApolloWrapper>
         </body>

@@ -4,6 +4,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 import { gql } from '@apollo/client';
 import { RestaurantsQuery, RestaurantsQueryVariables } from '@/graphql/graphql';
+import Link from 'next/link';
 
 const query = gql`
   query restaurants {
@@ -22,12 +23,21 @@ export default function Page() {
     RestaurantsQueryVariables
   >(query);
 
+  const restaurants = data.restaurants;
   return (
-    <main>
+    <main className="container">
       <div>
-        {data.restaurants.map((restaurant) => {
-          return <div key={restaurant.id}>{restaurant.name}</div>;
-        })}
+        <ul>
+          {restaurants.map((restaurant) => {
+            return (
+              <li key={restaurant.id}>
+                <Link href={`/restaurants/${restaurant.id}`}>
+                  {restaurant.name}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </main>
   );

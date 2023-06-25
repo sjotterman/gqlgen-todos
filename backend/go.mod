@@ -1,6 +1,6 @@
 module github.com/sjotterman/gqlgen-todos
 
-go 1.20
+go 1.19
 
 require (
 	github.com/99designs/gqlgen v0.17.31
