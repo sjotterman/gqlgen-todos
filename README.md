@@ -55,6 +55,22 @@ Run graphql server
 go run server.go
 ```
 
+### start-db
+
+Run database container
+
+```
+docker-compose up -d
+```
+
+### stop-db
+
+Stop database container
+
+```
+docker-compose down
+```
+
 
 # Dependencies
 
