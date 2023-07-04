@@ -7,10 +7,12 @@ services:
     ports:
       - "54320:5432"
     environment:
+      POSTGRES_DB: database
       POSTGRES_USER: user
       POSTGRES_PASSWORD: admin
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./backend/sqlc/schema.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
   pgadmin:
     image: dpage/pgadmin4

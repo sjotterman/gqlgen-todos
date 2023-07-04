@@ -71,6 +71,14 @@ Stop database container
 docker-compose down
 ```
 
+### connect-db-shell
+
+Connect to shell in database container
+
+```
+docker exec -it local_pgdb /bin/bash
+```
+
 
 # Dependencies
 
