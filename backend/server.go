@@ -35,6 +35,10 @@ func main() {
 	}
 	injectActiveSession := clerk.WithSession(client)
 	dbString := fmt.Sprintf("postgres://%s:%s@%s/%s", envVars.DbUsername, envVars.DbPassword, envVars.DbHost, envVars.DbName)
+	if(strings.Contains(envVars.DbHost, "0.0.0.0")) { 
+		fmt.Println("Local DB, disabling sslmode")
+		dbString += "?sslmode=disable"
+	} 
 	db, err := sql.Open("postgres", dbString)
 	if err != nil {
 		log.Fatal(err)

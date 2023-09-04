@@ -79,6 +79,29 @@ Connect to shell in database container
 docker exec -it local_pgdb /bin/bash
 ```
 
+### db-dump
+Dump the current state of the database so it can be used as a restore state.
+```
+docker exec local_pgdb pg_dump --clean --if-exists -cC -U user --dbname="postgres" > dump.sql
+```
+
+### db-check
+Check that db is set up and accepting connections
+```
+docker exec -i local_pgdb pg_isready -d postgres -U user
+```
+
+### db-reset
+Reset the local database to a fresh state
+
+TODO: remove the sleep and replace it with something like the above
+```
+docker-compose down --volumes
+xc start-db
+sleep 5
+cat dump.sql | docker exec -i local_pgdb psql -U user -d postgres
+```
+
 
 # Dependencies
 
